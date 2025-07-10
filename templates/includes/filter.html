@@ -1,0 +1,61 @@
+{% load static %}  {# Load static files #}
+
+<form method="GET" class="card shadow-sm p-3 mb-4" style="border-radius: 15px;">
+	<div class="row g-2 align-items-end">
+
+		<div class="col-md-2">
+			<label class="form-label"></label>
+			<select name="title" class="form-select">
+				<option value="">Subject</option>
+				{% for subj in title %}
+				<option value="{{ subj }}" {% if request.GET.title == subj %}selected{% endif %}>{{ subj }}</option>
+				{% endfor %}
+			</select>
+		</div>
+
+		<div class="col-md-2">
+			<label class="form-label"></label>
+			<select name="faculty" class="form-select">
+				<option value="">Faculty</option>
+				{% for f in faculty %}
+				<option value="{{ f.faculty }}" {% if request.GET.faculty == f.faculty|stringformat:"s" %}selected{% endif %}>
+            {{ f.faculty__name }}
+        </option>
+				{% endfor %}
+			</select>
+		</div>
+
+		<div class="col-md-2">
+			<label class="form-label"></label>
+			<select name="category" class="form-select">
+				<option value="">Course</option>
+				{% for cat in courses %}
+				<option value="{{ cat.course }}" {% if request.GET.category == cat.course|stringformat:"s" %}selected{% endif %}>
+            {{ cat.course__name }}
+        </option>
+				{% endfor %}
+			</select>
+		</div>
+
+		<div class="col-md-2">
+			<label class="form-label"></label>
+			<select name="price" class="form-select">
+				<option value="">Price</option>
+				<option value="500" {% if request.GET.price == "500" %}selected{% endif %}>Up to ₹500</option>
+				<option value="1000" {% if request.GET.price == "1000" %}selected{% endif %}>Up to ₹1000</option>
+				<option value="1500" {% if request.GET.price == "1500" %}selected{% endif %}>Up to ₹1500</option>
+				<option value="2000" {% if request.GET.price == "2000" %}selected{% endif %}>Up to ₹2000</option>
+			</select>
+		</div>
+
+		<div class="col-md-4">
+    		<div class="button-group mt-4">
+        <button type="submit" class="btn btn-dark">Filter</button>
+        <a href="{% url 'site:lecture' %}" class="btn btn-outline-secondary">Reset</a>
+    </div>
+</div>
+
+
+	</div>
+</form>
+

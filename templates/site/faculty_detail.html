@@ -1,0 +1,304 @@
+{% extends 'site/base.html' %}
+{% load static %}
+
+{% block title %}{{ faculty.title }} | Faculty Detail{% endblock %}
+
+{% block body %}
+<!-- Single News -->
+<section class="news-single section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-12">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="single-main">
+                            <!-- News Head -->
+                            <div class="news-head">
+                                {% if faculty.image %}
+                                    <img src="{{ faculty.image.url }}" alt="{{ faculty.name }}">
+                                {% else %}
+                                    <img src="{% static 'img/domyfaculty.jpg' %}" alt="{ faculty.name }">
+                                {% endif %}
+                            </div>
+                            <!-- News Title -->
+                            <h1 class="news-title">{{ faculty.name }}</h1>
+                            <div class="news-text">
+
+                                <p class="lead text-muted">{{ faculty.institute }}</p>
+                            </div>
+
+                            <div class="news-text">
+                                <hr>
+                                <p class="lead text-muted">{{ faculty.description }}</p>
+                            </div>
+                            <div class="meta mb-3">
+                                <div class="meta-left">
+                                    <span class="author"><i class="fa fa-book"></i> {{ faculty.pub_date }}</span>
+                                </div>
+                            </div>
+
+                            <div class="news-text">
+                                <h2 class="mb-4">Lectures by {{ faculty.name }}</h2>
+                                <div class="row">
+                                    {% for lecture in lectures %}
+                                    <div class="col-md-3 mb-4">
+                                        {% if lecture.image %}
+                                            <img src="{{ lecture.image.url }}" class="img-fluid rounded mb-2" alt="{{ lecture.title }}">
+                                        {% else %}
+                                            <img src="{% static 'img/domyfaculty.jpg' %}" alt="{ faculty.name }">
+                                        {% endif %}
+
+
+                                        <h5 class="text-center" style="font-size: medium;">{{ lecture.title }}</h5>
+                                        <p class="text-muted text-center" style="font-size: 10px;">{{ lecture.description }}</p>
+                                        <div class="text-center">
+                                            <a href="{% url 'site:lecture_detail' lecture.pk %}"
+                                                class="btn btn-primary btn-sm">View Lecture</a>
+                                        </div>
+                                    </div>
+                                    {% empty %}
+                                    <p style="margin-left: 15px;">No lectures available for this faculty yet.</p>
+                                    {% endfor %}
+                                </div>
+                                <hr>
+                            </div>
+
+                            <!-- Optional: Social Share -->
+                            <div class="blog-bottom mt-4">
+                                <ul class="social-share">
+                                    <li class="facebook"><a href="#"><i
+                                                class="fa fa-facebook"></i><span>Facebook</span></a></li>
+                                    <li class="twitter"><a href="#"><i
+                                                class="fa fa-twitter"></i><span>Twitter</span></a></li>
+                                    <li class="linkedin"><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                                </ul>
+                            </div>
+                            <!-- /Optional: Social Share -->
+                        </div>
+                        <div class="col-14">
+                            <div class="blog-comments">
+                                <h2>All Comments ({{ comments.count }})</h2>
+                                <div id="comments-body">
+                                    <!-- Single Comments -->
+                                    {% for comment in recent_comments %}
+                                    <div class="single-comments">
+                                        <div class="main">
+                                            <div class="head">
+                                                <img src="{% static 'img/user.jpg' %}" alt="#" />
+                                            </div>
+                                            <div class="body">
+                                                <h4>{{ comment.name }}</h4>
+                                                <div class="comment-meta"><span class="meta"><i class="fa fa-calendar"></i>{{comment.created_at|date:"M d, Y" }}</span>
+                                                            <span class="meta"><i class="fa fa-clock-o"></i>{{ comment.created_at|date:"h:i A" }}</span></div>
+                                                <p>{{ comment.content }}</p>
+                                                <a href="#" class="reply-link" data-comment-id="{{ comment.id }}"><i class="fa fa-reply"></i>reply</a>
+                                            </div>
+                                        </div>
+
+                                        {% for reply in comment.replies.all %}
+                                        <div class="single-comments left">
+                                            <div class="main">
+                                                <div class="head">
+                                                    <img src="img/author2.jpg" alt="#" />
+                                                </div>
+                                                <div class="body">
+                                                    <h4>{{ reply.name }}</h4>
+                                                    <div class="comment-meta"><span class="meta"><i
+                                                                class="fa fa-calendar"></i>{{ reply.created_at|date:"M d, Y" }}</span><span class="meta"><i
+                                                                class="fa fa-clock-o"></i>{{ comment.created_at|date:"h:i A" }}</span></div>
+                                                    <p>{{ reply.content }}</p>
+                                                    <a href="#" class="reply-link" data-comment-id="{{ reply.id }}"><i
+                                                            class="fa fa-reply"></i>reply</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+
+
+                                    </div>
+                                    {% empty %}
+                                    <p>No reviews yet. Be the first to comment!</p>
+                                    {% endfor %}
+
+                                    <div id="more-comments" style="display:none;">
+                                        {% for comment in remaining_comments %}
+                                        <div class="single-comments">
+                                            <div class="main">
+                                                <div class="head">
+                                                    <img src="{% static 'img/user.jpg' %}" alt="#" />
+                                                </div>
+                                                <div class="body">
+                                                    <h4>{{ comment.name }}</h4>
+                                                    <div class="comment-meta"><span class="meta"><i
+                                                                class="fa fa-calendar"></i>{{comment.created_at|date:"M d, Y" }}</span><span class="meta"><i
+                                                                class="fa fa-clock-o"></i>{{ comment.created_at|date:"h:i A" }}</span></div>
+                                                    <p>{{ comment.content }}</p>
+                                                    <a href="#" class="reply-link" data-comment-id="{{ comment.id }}"><i
+                                                            class="fa fa-reply"></i>reply</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% empty %}
+                                        <p>No more reviews yet. Be the first to comment!</p>
+                                        {% endfor %}
+                                    </div>
+
+                                    {% if remaining_comments %}
+                                    <button id="show-more-btn">Show All Comments</button>
+                                    {% endif %}
+
+                                    <!--/ End Single Comments -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Comment Form -->
+                        <div class="comments-form" id="reply-form">
+                            <h2>Leave a Comment</h2>
+                            <form class="form" method="POST">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-4 col-12">
+                                        <div class="form-group">
+                                            <i class="fa fa-user"></i>
+                                            <input type="text" name="name" placeholder="Your Name" required="required">
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group message">
+                                            <i class="fa fa-pencil"></i>
+                                            <textarea name="comment" rows="7"
+                                                placeholder="Type Your Message Here"></textarea>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="parent_id" id="parent_id">
+                                    <div class="col-12">
+                                        <div class="form-group button">
+                                            <button type="submit" class="btn primary"><i class="fa fa-send"></i>Submit
+                                                Comment</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+
+
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-lg-4 col-12">
+                <div class="main-sidebar">
+                    <!-- Single Widget -->
+                    <div class="single-widget search">
+                        <div class="form">
+                            <input type="email" placeholder="Search Here...">
+                            <a class="button" href="#"><i class="fa fa-search"></i></a>
+                        </div>
+                    </div>
+                    <!--/ End Single Widget -->
+                    <!-- Single Widget -->
+                    <div class="single-widget category">
+                        <h3 class="title">Blog Categories</h3>
+                        <ul class="categor-list">
+                            <li><a href="#">CA Final</a></li>
+                            <li><a href="#">CA Inter</a></li>
+                            <li><a href="#">CMA Final</a></li>
+                            <li><a href="#">CMA Inter</a></li>
+                            <li><a href="#">Test Series</a></li>
+                        </ul>
+                    </div>
+                    <!--/ End Single Widget -->
+
+                    <!-- Recommended faculty -->
+                    <div class="single-widget recent-post">
+                        <h3 class="title">Recommended Faculties</h3>
+                        <!-- Single Post -->
+                        {% for rec in recommended %}
+                        <div class="single-post">
+                            <div class="image">
+                                <a href="{% url 'site:faculty_detail' rec.id %}">
+                                    <img src="{{ rec.image.url }}" alt="{{ rec.title }}"
+                                        style="width: 100px; border-radius: 5px;">
+                                </a>
+
+                            </div>
+                            <div class="content">
+                                <h5><a href="{% url 'site:faculty_detail' rec.id %}">{{ rec.name|truncatechars:40}}</a>
+                                </h5>
+                                <ul class="comment">
+                                    <li><i class="fa fa-commenting-o" aria-hidden="true"></i>{{ rec.institute }}</li>
+                                    <li><i class="fa fa-calendar" aria-hidden="true"></i>{{ rec.pub_date|date:"d-m-Y" }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- End Single Post -->
+                        {% empty %}
+                        <p>No recommendations found.</p>
+                        {% endfor %}
+
+			            <div class="text-center mt-4">
+				            <a href="{% url 'site:faculty' %}" class="btn btn-dark">Show More</a>
+			            </div>
+
+                    </div>
+                    <!-- /Recommended Lectures -->
+
+                    <!-- Single Widget -->
+                    <div class="single-widget side-tags">
+                        <h3 class="title">Tags</h3>
+                        <ul class="tag">
+                            <li><a href="#">CA Final</a></li>
+                            <li><a href="#">CMA Final</a></li>
+                            <li><a href="#">CA Inter</a></li>
+                            <li><a href="#">CMA Inter</a></li>
+                            <li><a href="#">Test Series</a></li>
+                            <li><a href="#">10th & 12th</a></li>
+                            <li><a href="#">PageCraft Studio</a></li>
+                        </ul>
+                    </div>
+                    <!--/ End Single Widget -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script>
+    // Event listener for the show more button to display hidden comments
+    document.getElementById('show-more-btn')?.addEventListener('click', function () {
+        document.getElementById('more-comments').style.display = 'block';
+        this.style.display = 'none';
+    });
+
+    // Event listener for the reply links
+    document.querySelectorAll('.reply-link').forEach(function (link) {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            // Set the parent_id hidden field value for the reply form
+            let commentId = this.dataset.commentId;
+            document.getElementById('parent_id').value = commentId;
+
+            // Find the position of the comment and scroll the form into view
+            let commentElement = this.closest('.single-comments');
+            let replyForm = document.getElementById('reply-form');
+            replyForm.style.display = 'block';  // Show the reply form when clicked
+
+            // Optionally, scroll the form into view near the comment
+            replyForm.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        });
+    });
+
+
+</script>
+
+{% endblock %}

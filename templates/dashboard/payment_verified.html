@@ -1,0 +1,16 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block title %}Payment Verification{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="d-flex align-items-center justify-content-center" style="height: 80vh;">
+        <div class="text-center">
+            <img src="{% static 'img/payment_success.webp' %}" alt="Success" class="mb-4" width="120">
+            <h2 class="text-success">Transaction Successful</h2>
+            <p class="lead">Your purchase was completed successfully.</p>
+            <a href="{% url 'student_dash:dashboard' %}" class="btn btn-primary mt-3">Go to Dashboard</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

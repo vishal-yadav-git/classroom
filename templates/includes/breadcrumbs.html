@@ -1,0 +1,18 @@
+{% load static %}  {# Load static files #}
+
+<div class="breadcrumbs overlay" data-stellar-background-ratio="0.5" style="background-image: url('{% static 'img/breadcrumb_bg.jpg' %}');">
+    <div class="container">
+        <div class="bread-inner">
+            <div class="row">
+                <div class="col-12">
+                    <h2>{{ page_title }}</h2>  {# Dynamic Page Title #}
+                    <ul class="bread-list">
+                        <li><a href="{% url 'site:home' %}">Home</a></li>  {# Fixed URL #}
+                        <li><i class="bi bi-chevron-right"></i></li>
+                        <li class="active">{{ page_title }}</li>  {# Dynamic Active Page Name #}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

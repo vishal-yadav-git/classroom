@@ -1,0 +1,117 @@
+{% load static %}  {# Load static files #}
+
+<body>
+
+<!-- Bootstrap Modal for Enrollment -->
+<div class="modal fade" id="enrollmentModal" tabindex="-1" aria-labelledby="enrollmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="enrollmentModalLabel">Enrollment Form</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <p class="my-3 text-center">Please fill out the form carefully to enroll in a lecture.</p>
+            <div class="modal-body">
+                <!-- Bootstrap Enrollment Form -->
+                <form id="enrollmentForm" enctype="multipart/form-data">
+                    <div class="row g-3">
+                        <div class="col-lg-6 col-md-6 col-12">
+                            <label for="name" class="form-label">Full Name</label>
+                            <input type="text" class="form-control form-control-sm" id="name" required >
+                        </div>
+
+                        <div class="col-lg-6 col-md-6 col-12">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control form-control-sm" id="email" required onblur="fetchUserDetails()">
+                        </div>            
+
+                        <div class="col-lg-6 col-md-6 col-12">
+                            <label for="phone" class="form-label">Phone</label>
+                            <input type="tel" class="form-control form-control-sm" id="phone" required>
+                        </div>
+                    
+                        <div class="col-lg-6 col-md-6 col-12">
+                            <label for="course" class="form-label">Course</label>
+                            <input type="text" class="form-control form-control-sm" id="course" required >
+                        </div>
+                    </div>
+
+                    <!-- Payment Section -->
+                    <div class="my-3 text-center">
+                        <label class="form-label fw-bold">Scan & Pay</label>
+                        <div>
+                            <img src="{% static 'img/qr.jpeg' %}" alt="QR Code" class="img-fluid" width="150">
+                        </div>
+                        <p class="mb-0"><strong>UPI Number: +91 7879766536</strong></p>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-lg-6 col-md-6 col-12">
+                            <label for="transaction_id" class="form-label">UPI Transaction ID</label>
+                            <input type="text" class="form-control form-control-sm" id="transaction_id" required>
+                        </div>
+
+                        <!-- Payment Screenshot Upload -->
+                        <div class="col-lg-6 col-md-6 col-12">
+                            <label for="payment_screenshot" class="form-label">Upload Payment Screenshot</label>
+                            <input type="file" class="form-control form-control-sm" id="payment_screenshot" name="payment_screenshot" required>
+                        </div>
+                    </div>
+
+                    <!-- Razorpay Button -->
+                    <div class="my-3 text-center">
+                        <button type="button" id="razorpayButton" class="btn btn-success w-100">Pay via Razorpay</button>
+                    </div>
+
+                    <!-- Modal Footer with Submit Button -->
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary w-100">Submit Enrollment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Razorpay Integration JS -->
+<script>
+    // Fetch Razorpay Order ID (backend call to create the order)
+    document.getElementById("razorpayButton").onclick = function(e) {
+        e.preventDefault();
+        fetch('/create-razorpay-order/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                amount: 1000,  // Adjust according to the lecture price
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            var options = {
+                "key": "YOUR_RAZORPAY_KEY",  // Replace with your Razorpay key
+                "amount": data.amount, // Amount in paise
+                "currency": "INR",
+                "name": "Lecture Enrollment",
+                "description": "Payment for lecture enrollment",
+                "order_id": data.order_id, // Received from the backend
+                "handler": function (response) {
+                    alert("Payment successful! Transaction ID: " + response.razorpay_payment_id);
+                },
+                "prefill": {
+                    "name": document.getElementById("name").value,
+                    "email": document.getElementById("email").value,
+                    "contact": document.getElementById("phone").value,
+                },
+            };
+            var razorpay = new Razorpay(options);
+            razorpay.open();
+        })
+        .catch(error => {
+            console.log('Error fetching Razorpay order:', error);
+        });
+    };
+</script>
+
+

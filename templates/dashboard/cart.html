@@ -1,0 +1,86 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block title %} Cart {% endblock %}
+
+{% block body %}
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Your Cart</h1>
+        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+    </div>
+    {% if messages %}
+    <div class="mb-4">
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}" style="color: red;">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+
+        <div class="row">
+            {% for item in cart_items %}
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card shadow">
+                    <a>
+                    <img src="{{ item.course.image.url }}" class="img-fluid mb-3 rounded"></a>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.course.title }}</h5>
+                        <p class="card-text">
+                            <span class="text-muted" style="font-size: 14px;">
+                                <del>₹ {{ item.course.total_price }}/-</del>
+                            </span>
+                            <span class="text-danger fw-bold" style="font-size: 20px;">
+                                ₹ {{ item.course.price }}/-
+                            </span>
+                        </p>
+                        <a href="{% url 'site:lecture_detail' item.course.pk %}" class="btn btn-sm btn-info mb-2">View Lecture</a>
+
+                        <form method="POST" action="{% url 'student_dash:remove_from_cart' item.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+               <p>Your cart is empty.</p>
+            {% endfor %}            
+   
+<!-- Checkout -->
+ </div>
+    </div>
+
+ 
+<div class="container-fluid">
+<div class="row">
+    <div class="col-lg-8 mb-4">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Account Details</h6>
+            </div>
+            <div class="card-body">
+                <div class="col-sm-4 font-weight-bold">
+                    <h4>Total: ₹{{ total_price }}</h4>
+                    <a href="{% url 'student_dash:checkout' %}" class="btn btn-success">Proceed to Checkout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+<!-- /.container-fluid -->
+</div>
+<!-- End of Main Content -->
+
+
+
+
+
+{% endblock %}

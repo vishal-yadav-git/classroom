@@ -1,0 +1,476 @@
+{% extends 'site/base.html' %}
+{% load static %}
+
+{% block title%} classroom {% endblock %}
+
+{% block body %}
+
+
+
+<!-- Slider Area -->
+<section class="slider">
+	<div class="hero-slider">
+		<!-- Start Single Slider -->
+		{% for i in banner %}
+<div class="single-slider" style="background-image: url('{{ i.image.url }}');">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7">
+                <div class="text">
+                    <h1>{{ i.title }}</h1>
+                    <p>{{ i.description|truncatewords:20 }}</p>
+                    <div class="button">
+                        <a class="btn">Enroll Now</a>
+                        <a href="{% url 'site:lecture' %}#blog" class="btn primary">Learn More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+	</div>
+</section>
+<!--/ End Slider Area -->
+
+<!-- Start Schedule Area -->
+<section class="schedule">
+	<div class="container">
+		<div class="schedule-inner">
+			<div class="row">
+				<div class="col-lg-4 col-md-6 col-12 ">
+					<!-- single-schedule -->
+					<div class="single-schedule first">
+						<div class="inner">
+							<div class="icon">
+								<i class="bi bi-camera-reels"></i>
+							</div>
+							<div class="single-content">
+								<span></span>
+								<h4>Video Lectures</h4>
+								<p>Achieve your dream of becoming a CA | CMA | CS with the ultimate platform </p>
+								<a href="#">LEARN MORE<i class="fa fa-long-arrow-right"></i></a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-6 col-12">
+					<!-- single-schedule -->
+					<div class="single-schedule middle">
+						<div class="inner">
+							<div class="icon">
+								<i class="bi bi-journal-text"></i>
+							</div>
+							<div class="single-content">
+								<span></span>
+								<h4>Books in Hardcopy</h4>
+								<p>Get the hardcopy of all study materials delivered to your doorstep</p>
+								<a href="#">LEARN MORE<i class="fa fa-long-arrow-right"></i></a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-12 col-12">
+					<!-- single-schedule -->
+					<div class="single-schedule last">
+						<div class="inner">
+							<div class="icon">
+								<i class="bi bi-gear"></i>
+							</div>
+							<div class="single-content">
+								<span></span>
+								<h4>Craft your Book</h4>
+								<p>You are a Faculty want to make your own book, we will help you</p>
+								<a href="#">LEARN MORE<i class="fa fa-long-arrow-right"></i></a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!--/End Start schedule Area -->
+
+<!-- Start portfolio -->
+<section class="portfolio section">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="section-title">
+					<h2>Top CA|CMA|CS Educators & best Mentorship for Your Success!</h2>
+					<p>Expert Faculty, Personalized Mentorship – Your CA | CMA Journey Simplified with th Ultimate
+						platform CLassroom!</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-lg-12 col-12">
+				<div class="owl-carousel portfolio-slider">
+					{% for i in faculty %}
+					<div class="single-pf">
+						<img src="{{ i.image.url }}" alt="#">
+						<a href="{% url 'site:faculty_detail' i.id %}" class="btn">View Details</a>
+					</div>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!--/ End portfolio -->
+
+
+<!-- Start lecture list Area -->
+<section class="blog section" id="blog">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="section-title">
+					<h2>Latest Lectures</h2>
+					<p>Unlock the Power of Knowledge with Our Latest Lectures!</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- Start Lectures Grid -->
+		<div class="container">
+			<div class="row">
+				{% for i in lectures %}
+				<div class="col-lg-3 col-md-4 col-6 mb-4">
+					<!-- Single Lecture Card -->
+					<div class="single-news">
+						<a href="{% url 'site:lecture_detail' i.id %}" class="text-decoration-none text-dark">
+						<div class="news-head">
+							{% if i.image %}
+							<img src="{{ i.image.url }}" alt="Lecture Image" class="img-fluid">
+							{% else %}
+							<img src="{% static 'img/domylecture.jpg' %}" alt="Default Lecture Image" class="img-fluid">
+							{% endif %}
+						</div>
+						<div class="news-body">
+							<div class="news-content">
+								<h2 class="fw-bold">{{ i.title }}</h2>
+								<p class="text">{{ i.description|truncatewords:20 }}</p> <!-- Limit text -->
+								<p class="price">
+									<span class="text-muted" style="font-size: 14px;">
+										<del>{{ i.total_price }}/-</del>
+									</span>
+									<span class="text-danger fw-bold" style="font-size: 20px;">
+										{{ i.price }}/-
+									</span>
+								</p>
+							</div>
+						</div>
+					</div>
+					<!-- End Single Lecture Card -->
+				</div>
+				{% endfor %}
+			</div>
+			<div class="text-center mt-4">
+				<a href="{% url 'site:lecture' %}#blog" class="btn btn-dark">Show More</a>
+			</div>
+		</div>
+		<!-- End Lectures Grid -->
+
+	</div>
+</section>
+
+<!-- End lecture list Area -->
+
+<!-- Start clients -->
+<div class="clients overlay" data-stellar-background-ratio="0.5" style="background-image: url('{% static 'img/call-bg.jpg' %}');">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12 col-md-12 col-12">
+				<div class="owl-carousel clients-slider">
+					{% for i in franchisee %}
+					<div class="single-clients">
+						<img src="{{ i.image.url }}" alt="#">
+					</div>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--/Ens clients -->
+
+
+<!-- Start Why choose -->
+<section class="why-choose section">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="section-title">
+					<h2>We Offer Different Services To Improve Your study</h2>
+					<!-- <img src="img/section-img.png" alt="#"> -->
+					<p>Lorem ipsum dolor sit amet consectetur adipiscing elit praesent aliquet. pretiumts</p>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-6 col-12">
+				<!-- Start Choose Left -->
+				<div class="choose-left">
+					<h3>Who We Are</h3>
+					<p>"Classroom – Your ultimate partner in the CA | CMA |CS journey! From expert guidance to premium
+						study materials, we help you soar toward success in CA|CMA|CS Foundation, Inter, and Final.
+						Elevate your learning with Classroom!"</p>
+					<p>Our Services </p>
+					<div class="row">
+						<div class="col-lg-6">
+							<ul class="list">
+								<li><i class="fa fa-caret-right"></i>CA (Chartered Accountant)</li>
+								<li><i class="fa fa-caret-right"></i>CMA (Certified Mgmt. Acct.)</li>
+								<li><i class="fa fa-caret-right"></i>CS (Company Secretary)</li>
+							</ul>
+						</div>
+						<div class="col-lg-6">
+							<ul class="list">
+								<li><i class="fa fa-caret-right"></i>10th Class Lectures</li>
+								<li><i class="fa fa-caret-right"></i>12th (All Subjects)</li>
+								<li><i class="fa fa-caret-right"></i>CUET</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<!-- End Choose Left -->
+			</div>
+			<div class="col-lg-6 col-12">
+				<!-- Start Choose Rights -->
+				<div class="choose-right">
+					<div class="video-image">
+						<!-- Video Animation -->
+						<div class="promo-video">
+							<div class="waves-block">
+								<div class="waves wave-1"></div>
+								<div class="waves wave-2"></div>
+								<div class="waves wave-3"></div>
+							</div>
+						</div>
+						<!--/ End Video Animation -->
+						<iframe width="640" height="360" src="https://www.youtube.com/embed/l7xEIxxTHdM"
+							title="#learn English,#spoken English,#english language kese bolna sikhe" frameborder="0"
+							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+							referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+					</div>
+				</div>
+				<!-- End Choose Rights -->
+			</div>
+		</div>
+	</div>
+</section>
+<!--/ End Why choose -->
+
+
+<!-- Start service -->
+<section class="services section">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="section-title">
+					<h2>We Offer Different Courses and Services To Improve You</h2>
+					<p>Empowering You with Courses and Services Designed for Your Success.</p>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-4 col-md-6 col-12">
+				<!-- Start Single Service -->
+				<div class="single-service">
+					<i class="fa-solid fa-user-graduate"></i>
+					<h4><a href="service-details.html">Chartered Accountant (CA)</a></h4>
+					<p>CA is not just a course, it’s a journey of discipline, dedication, and determination.
+						A CA isn't just a professional — they are the backbone of the financial world.</p>
+				</div>
+				<!-- End Single Service -->
+			</div>
+			<div class="col-lg-4 col-md-6 col-12">
+				<!-- Start Single Service -->
+				<div class="single-service">
+					<i class="bi bi-patch-check-fill"></i>
+					<h4><a href="service-details.html">Certified Management Accountant (CMA)</a></h4>
+					<p>A Certified Management Accountant (CMA) is a global expert in financial management and strategic decision-making
+					</p>
+				</div>
+				<!-- End Single Service -->
+			</div>
+			<div class="col-lg-4 col-md-6 col-12">
+				<!-- Start Single Service -->
+				<div class="single-service">
+					<i class="fa-solid fa-graduation-cap"></i>
+					<h4><a href="service-details.html">Company Secretary (CS)</a></h4>
+					<p>A Company Secretary (CS) is the guardian of corporate governance and legal compliance.
+					</p>
+				</div>
+				<!-- End Single Service -->
+			</div>
+			<div class="col-lg-4 col-md-6 col-12">
+				<!-- Start Single Service -->
+				<div class="single-service">
+					<i class="bi bi-pencil-square"></i>
+					<h4><a href="service-details.html">Common University Entrance Test (CUET)</a></h4>
+					<p>The Common University Entrance Test (CUET) opens doors to India’s top universities with a single exam.
+					</p>
+				</div>
+				<!-- End Single Service -->
+			</div>
+			<div class="col-lg-4 col-md-6 col-12">
+				<!-- Start Single Service -->
+				<div class="single-service">
+					<i class="fa-solid fa-pen-nib"></i>
+					<h4><a href="service-details.html">Class 10th & 12th</a></h4>
+					<p>Class 10th and 12th: Get the best notes and lectures from Classroom to build a strong foundation for your future.
+					</p>
+				</div>
+				<!-- End Single Service -->
+			</div>
+			<div class="col-lg-4 col-md-6 col-12">
+				<!-- Start Single Service -->
+				<div class="single-service">
+					<i class="fa-solid fa-object-ungroup"></i>
+					<h4><a href="service-details.html">Page Craft Studio</a></h4>
+					<p>Where Faculty Meets Professional Book Designer, Typist, Editor, Powered by the Classroom.
+					</p>
+				</div>
+				<!-- End Single Service -->
+			</div>
+		</div>
+	</div>
+</section>
+<!--/ End service -->
+
+
+<!-- Start Call to action -->
+<section id="call-action" class="call-action overlay" data-stellar-background-ratio="0.5" style="background-image: url('{% static 'img/call-bg.jpg' %}');">
+
+	<div class=" container">
+	<div class="row">
+		<div class="col-lg-12 col-md-12 col-12">
+			<div class="content">
+				<h2>Do you need any help? Call @+91 7471145650</h2>
+				<p>"Need help? We're here for you! Contact Classroom for guidance on CA courses, study materials, and
+					expert support. Your success is our priority!"
+
+					Let me know if you want any DISCOUNT! 😊</p>
+				<div class="button">
+					<a href="#" class="btn">Contact Now</a>
+					<a href="#" class="btn second">Learn More<i class="fa fa-long-arrow-right"></i></a>
+				</div> 
+			</div>
+		</div>
+	</div>
+	</div>
+</section>
+<!--/ End Call to action -->
+
+
+<!-- Start Appointment -->
+<section class="appointment">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="section-title">
+					<h2>We Are Always Ready to Help You. Raise an Enquiry!</h2>
+					<p>Have Questions? We're Here to Help! Get in Touch Now. and Looking for Something Exclusive? Send
+						Us Your Feedback!</p>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-6 col-md-12 col-12">
+				<form class="form" action="#">
+					<div class="row">
+						<div class="col-lg-6 col-md-6 col-12">
+							<div class="form-group">
+								<input name="name" type="text" placeholder="Name">
+							</div>
+						</div>
+						<div class="col-lg-6 col-md-6 col-12">
+							<div class="form-group">
+								<input name="email" type="email" placeholder="Email">
+							</div>
+						</div>
+						<div class="col-lg-6 col-md-6 col-12">
+							<div class="form-group">
+								<input name="phone" type="text" placeholder="Phone">
+							</div>
+						</div>
+						<div class="col-lg-6 col-md-6 col-12">
+							<div class="form-group">
+								<div class="nice-select form-control wide" tabindex="0"><span
+										class="current">Course</span>
+									<ul class="list">
+										<li data-value="1" class="option selected ">CA Final</li>
+										<li data-value="2" class="option">CMA Final</li>
+										<li data-value="3" class="option">CA Inter</li>
+										<li data-value="4" class="option">CMA Inter</li>
+										<li data-value="5" class="option">CS</li>
+										<li data-value="6" class="option">10th</li>
+										<li data-value="7" class="option">12th</li>
+										<li data-value="8" class="option">Other</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-6 col-md-6 col-12">
+							<div class="form-group">
+								<div class="nice-select form-control wide" tabindex="0"><span
+										class="current">occupation</span>
+									<ul class="list">
+										<li data-value="1" class="option selected ">Student</li>
+										<li data-value="2" class="option">Faculty</li>
+										<li data-value="3" class="option">Other</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-6 col-md-6 col-12">
+							<div class="form-group">
+								<input type="text" placeholder="Date" id="datepicker">
+							</div>
+						</div>
+						<div class="col-lg-12 col-md-12 col-12">
+							<div class="form-group">
+								<textarea name="message" placeholder="Write Your Message Here....."></textarea>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-5 col-md-4 col-12">
+							<div class="form-group">
+								<div class="button">
+									<button type="submit" class="btn">Submit</button>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-7 col-md-8 col-12">
+							<p>(We will be confirm by an Mail)</p>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="col-lg-6 col-md-12 ">
+				<div class="appointment-image">
+					<img src="{% static 'img/contact.jpg' %}" alt="#">
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- End Appointment -->
+
+<!-- login popup -->
+<script>
+	document.addEventListener("DOMContentLoaded", function() {
+	  var loginModal = new bootstrap.Modal(document.getElementById("loginModal"));
+	  loginModal.show(); // Auto-show login modal only on index.html
+	});
+  </script>
+
+<!-- End login popup -->
+
+{% endblock %}

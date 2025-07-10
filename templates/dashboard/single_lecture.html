@@ -1,0 +1,144 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block title %}Playlist{% endblock %}
+
+{% block head %}
+<style>
+.video-js {
+    width: 100% !important;
+    max-height: 500px;
+    border-radius: 12px;
+}
+#customControls {
+    margin-top: 10px;
+}
+#customControls button, #customControls select {
+    margin-right: 8px;
+}
+#lectureList .list-group-item {
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+#lectureList .list-group-item:hover {
+    background-color: #f8f9fa;
+}
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="container-fluid mt-4">
+    <div class="row">
+        <!-- Video Section -->
+<div class="col-lg-8 video-section">
+    {% if lectures %}
+    <div class="video-container" style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden;">
+  <iframe src="https://www.youtube.com/embed/{{ lectures.0.youtube_url|cut:'https://youtu.be/' }}"
+          style="position:absolute; top:0; left:0; width:100%; height:100%;"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+  </iframe>
+</div>
+        <!-- <div class="embed-responsive embed-responsive-16by9">
+            <iframe id="youtubePlayer" width="100%" height="400"
+                src="https://www.youtube.com/embed/{{ lectures.0.youtube_url|cut:'https://youtu.be/' }}"
+                title="YouTube video player" frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe>
+        </div> -->
+        <h5 id="lectureTitle" class="mt-3">{{ lectures.0.title }}</h5>
+        <p id="lectureDesc">{{ lectures.0.description }}</p>
+
+        <div id="notesSection" class="mt-3">
+            {% if lectures.0.notes.all %}
+                <strong>Notes:</strong>
+                <ul>
+                    {% for note in lectures.0.notes.all %}
+                        <li><a href="{{ note.file.url }}" target="_blank">Note {{ forloop.counter }}</a></li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+
+        <!-- Custom Controls -->
+        <div id="customControls" class="mt-3">
+            <button class="btn btn-secondary" onclick="prevLecture()">⏮️ Previous</button>
+            <button class="btn btn-secondary" onclick="nextLecture()">Next ⏭️</button>
+        </div>
+    {% else %}
+        <p>No lectures available in this playlist.</p>
+    {% endif %}
+</div>
+
+        <!-- Playlist -->
+        <div class="col-lg-4">
+            <h5 class="mb-3">Lectures in "{{ playlist.name }}"</h5>
+            <ul class="list-group" id="lectureList">
+                {% for i in lectures %}
+                <li class="list-group-item d-flex align-items-center {% if forloop.counter0 == 0 %}active{% endif %}" id="lecture-{{ forloop.counter0 }}" onclick="playLecture({{ forloop.counter0 }})">
+                    <img src="{% static 'img/app_thumbnail_1.jpg' %}" class="img-thumbnail mr-3" width="80" alt="{{ i.title }}">
+                    <div>
+                        <h6 class="mb-0">{{ i.title }}</h6>
+                        <small>{{ i.description|truncatechars:40 }}</small>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+
+  // Disable Right Click
+  document.addEventListener('contextmenu', event => event.preventDefault());
+
+  // Disable Inspect (F12, Ctrl+Shift+I)
+  document.onkeydown = function(e) {
+    if (e.key === "F12" || 
+        (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "i") || 
+        (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "j") || 
+        (e.ctrlKey && e.key.toLowerCase() === "u")) {
+      return false;
+    }
+  }
+
+    const lectures = JSON.parse('{{ lectures_json|safe }}');
+    let currentIndex = 0;
+    
+    function playLecture(index) {
+        currentIndex = index;
+        const lecture = lectures[index];
+    
+        // YouTube Embed URL formatting
+        const videoId = lecture.video_url.split('/').pop();
+        document.getElementById("youtubePlayer").src = `https://www.youtube.com/embed/${videoId}`;
+        document.getElementById("lectureTitle").textContent = lecture.title;
+        document.getElementById("lectureDesc").textContent = lecture.description;
+    
+        // Active lecture highlight
+        document.querySelectorAll('#lectureList .list-group-item').forEach(el => el.classList.remove('active'));
+        document.getElementById(`lecture-${index}`).classList.add('active');
+    
+        // Update notes
+        const notesSection = document.getElementById("notesSection");
+        notesSection.innerHTML = '';
+        if (lecture.notes && lecture.notes.length > 0) {
+            let html = '<strong>Notes:</strong><ul>';
+            lecture.notes.forEach((note, i) => {
+                html += `<li><a href="${note}" target="_blank">Note ${i + 1}</a></li>`;
+            });
+            html += '</ul>';
+            notesSection.innerHTML = html;
+        }
+    }
+    
+    function nextLecture() {
+        if (currentIndex < lectures.length - 1) playLecture(currentIndex + 1);
+    }
+    function prevLecture() {
+        if (currentIndex > 0) playLecture(currentIndex - 1);
+    }
+    </script>
+{% endblock %}

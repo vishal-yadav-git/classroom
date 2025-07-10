@@ -1,0 +1,129 @@
+{% extends 'site/base.html' %}
+{% load static %}
+
+{% block title%} registration {% endblock %}
+
+{% block body %}
+
+<!-- Breadcrumbs -->
+{% include 'includes/breadcrumbs.html' with page_title="Registration" %}
+<!-- End Breadcrumbs -->
+
+<!-- Start Appointment -->
+<section class="appointment">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="section-title">
+					<h2>Register Your Basic Details</h2>
+					<p>Join the Exclusive Experience – Register Now! and Unlock Premium Benefits GET Extra Discount !!
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-6 col-md-12 col-12">
+				<form method='POST' class="form" action="">
+					{% csrf_token %}
+					{% if form.non_field_errors %}
+					<div class="alert alert-danger mt-3">
+						{{ form.non_field_errors }}
+					</div>
+					{% endif %}
+					<div class="row">
+						<div class="col-lg-6 col-md-6 col-12">
+							<div class="form-group">
+								<input name="first_name" type="text" placeholder="First Name"
+									value="{{ form.first_name.value|default:'' }}" required>
+							</div>
+						</div>
+
+						<div class="col-lg-6 col-md-6 col-12">
+							<div class="form-group">
+								<input name="last_name" type="text" placeholder="Last Name"
+									value="{{ form.last_name.value|default:'' }}">
+							</div>
+						</div>
+
+						<div class="col-lg-6 col-md-6 col-12">
+							<div class="form-group">
+								<input name="phone" type="text" placeholder="Phone"
+									value="{{ form.phone.value|default:'' }}" required>
+							</div>
+						</div>
+
+						<div class="col-lg-6 col-md-6 col-12">
+							<div class="form-group">
+								<input name="email" type="email" placeholder="Email"
+									value="{{ form.email.value|default:'' }}" required>
+								<small class="text-danger">{{ form.email.errors }}</small>
+							</div>
+						</div>
+
+						<div class="col-lg-6 col-md-4 col-12">
+							<div class="form-group">
+								<input name="password" type="password" placeholder="Password" required>
+								<small class="text-danger">{{ form.password.errors }}</small>
+							</div>
+						</div>
+
+						<div class="col-lg-6 col-md-4 col-12">
+							<div class="form-group">
+								<input name="confirm_password" type="password" placeholder="Confirm Password" required>
+								<small class="text-danger">{{ form.confirm_password.errors }}</small>
+							</div>
+						</div>
+
+						<div class="col-lg-6 col-md-6 col-12">
+							<div class="form-group">
+								<select name="course" id="course" required>
+									<option value="">Course</option>
+									<option value="ca_final">CA Final</option>
+									<option value="cma_final">CMA Final</option>
+									<option value="ca_inter">CA Inter</option>
+									<option value="cma_inter">CMA Inter</option>
+									<option value="cs">CS</option>
+									<option value="tenth">10th</option>
+									<option value="twelfth">12th</option>
+									<option value="other">Other</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="col-lg-6 col-md-6 col-12">
+							<div class="form-group">
+								<select name="occupation" id="occupation" required>
+									<option value="">Occupation</option>
+									<option value="faculty">Faculty</option>
+									<option value="student">Student</option>
+									<option value="other">Other</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-5 col-md-6 col-12">
+							<div class="form-group">
+								<div class="button">
+									<button type="submit" class="btn">Submit</button>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-7 col-md-8 col-12">
+							<p>Already have an account? <a href="{% url 'site:login' %}" style="color: rgb(23, 106, 188);">Log in</a></p>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="col-lg-6 col-md-12 ">
+				<div class="appointment-image">
+					<img src="{% static 'img/registration.jpg' %}" alt="#">
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- End Appointment -->
+
+
+{% endblock %}

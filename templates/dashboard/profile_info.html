@@ -1,0 +1,104 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block title %} Profile {% endblock %}
+
+{% block body %}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Flash message here -->
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+
+
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Edit Profile</h1>
+            <button type="submit" class="btn btn-sm btn-success shadow-sm">
+                <i class="fas fa-save fa-sm text-white-50"></i> Save Changes
+            </button>
+        </div>
+
+        <div class="row">
+            <!-- Profile Picture -->
+            <div class="col-lg-4 mb-4">
+                <div class="card shadow">
+                    <div class="card-body text-center">
+                        {% if user.image %}
+                            <img class="img-profile rounded-circle mb-3" 
+                                 src="{{ user.image.url }}" 
+                                 style="width: 150px; height: 150px; object-fit: cover;">
+                        {% else %}
+                            <img class="img-profile rounded-circle mb-3" 
+                                 src="{% static 'img/user.jpg' %}" 
+                                 style="width: 150px; height: 150px; object-fit: cover;">
+                        {% endif %}
+                        <div class="form-group">
+                            <input type="file" name="image" class="form-control-file mt-2">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Details -->
+            <div class="col-lg-8 mb-4">
+                <div class="card shadow">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Account Details</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-sm-4 font-weight-bold">First Name</div>
+                            <div class="col-sm-8">
+                                <input type="text" name="first_name" class="form-control" value="{{ user.first_name }}">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-4 font-weight-bold">Last Name</div>
+                            <div class="col-sm-8">
+                                <input type="text" name="last_name" class="form-control" value="{{ user.last_name }}">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-4 font-weight-bold">Phone</div>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control-plaintext" value="{{ user.phone }}" readonly>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-4 font-weight-bold">Email</div>
+                            <div class="col-sm-8">
+                                <input type="email" class="form-control-plaintext" value="{{ user.email }}" readonly>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-4 font-weight-bold">Course</div>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control-plaintext" value="{{ user.course }}" readonly>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-4 font-weight-bold">Occupation</div>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control-plaintext" value="{{ user.occupation }}" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+{% endblock %}

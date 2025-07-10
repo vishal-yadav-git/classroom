@@ -1,0 +1,72 @@
+{% extends 'site/base.html' %}
+{% load static %}
+
+{% block title%} Lectures {% endblock %}
+
+{% block body %}
+
+<!-- Breadcrumbs -->
+{% include 'includes/breadcrumbs.html' with page_title="Lectures" %}
+<!-- End Breadcrumbs -->
+
+<!-- Start lecture list Area -->
+<section class="blog section" id="blog">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="section-title">
+					<h2>Latest Lectures</h2>
+					<p>Unlock the Power of Knowledge with Our Latest Lectures!</p>
+				</div>
+			</div>
+		</div>
+		
+		<!-- Filter baar -->
+		{% include 'includes/filter.html' with page_title="Filter" %}
+		<!-- end Filter baar -->
+		
+		<!-- Start Lectures Grid -->
+		<div class="container">
+			<div class="row">
+				{% for i in lectures %}
+				<div class="col-lg-3 col-md-4 col-6 mb-4">
+					<!-- Single Lecture Card -->
+					<a href="{% url 'site:lecture_detail' i.id %}" class="text-decoration-none text-dark">
+					<div class="single-news">
+						<div class="news-head">
+							{% if i.image %}
+							
+							<img src="{{ i.image.url }}" alt="Lecture Image" class="img-fluid">
+							{% else %}
+							<img src="{% static 'img/domylecture.jpg' %}" alt="Default Lecture Image" class="img-fluid">
+							{% endif %}
+						</div>
+						<div class="news-body">
+							<div class="news-content">
+								<h2 class="fw-bold">{{ i.title }}</h2>
+								<p class="text">{{ i.description|truncatewords:20 }}</p> <!-- Limit text -->
+								<p class="price">
+									<span class="text-muted" style="font-size: 14px;">
+										<del>{{ i.total_price }}/-</del>
+									</span>
+									<span class="text-danger fw-bold" style="font-size: 20px;">
+										{{ i.price }}/-
+									</span>
+								</p>
+							</div>
+						</div>
+					</div>
+				
+					<!-- End Single Lecture Card -->
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+		<!-- End Lectures Grid -->
+
+	</div>
+</section>
+
+<!-- End lecture list Area -->
+
+{% endblock %}
